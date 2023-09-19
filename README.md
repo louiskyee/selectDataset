@@ -1,5 +1,7 @@
 # selectDataset
-Select the most dispersed results on the existing data set
+
+## Introduction
+The primary function is to allow users to select the most dispersed samples from an existing dataset. The core technology employed is Trend Micro Locality Sensitive Hash (available on [GitHub](https://github.com/trendmicro/tlsh.git)). The time complexity is O(m*n), where n represents the size of the dataset, and m represents the number of data points selected.
 
 ## Prerequisites
 * python >= 3.10
