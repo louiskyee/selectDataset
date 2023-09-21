@@ -11,7 +11,7 @@ import os
 DEFAULT_INPUT_PATH = "./dataset/"
 DEFAULT_TIMES_LESS = 5
 
-class selectDateset(object):
+class selectDataset(object):
     def __init__(self):
         self.datasetPath = DEFAULT_INPUT_PATH
         self.timesLess = DEFAULT_TIMES_LESS
@@ -25,39 +25,39 @@ class selectDateset(object):
         self.maxValue = -np.inf
         self.file_list = []
         self.hash_list = []
-        self.weight_list = []
-        self.parmater_parser()
+        self.weight_list = []        
 
     def run(self):
+        self.parameter_parser()
         self.get_file_list()
         self.get_choosed_files()
         self.write_hash_dict()
         self.write_choosed_files_to_txt()
 
-    def parmater_parser(self):
+    def parameter_parser(self):
         '''
         A method for parsing command line parameters
         using `python argparse`.
         '''
         parser = argparse.ArgumentParser(description="Parse command line parameters.")
-
-        parser.add_argument("--input-folder","-i",
+    
+        parser.add_argument("--input-folder", "-i",
                             dest="input_folder",
                             nargs="?",
                             default=DEFAULT_INPUT_PATH,
                             help="Input dataset folder."
                             )
-        parser.add_argument("--timesLess","-t",
+        parser.add_argument("--timesLess", "-t",
                             dest="times_less",
                             nargs="?",
-                            default=5,
+                            default=DEFAULT_TIMES_LESS,
                             help="Take a fraction of the original data set."
                             )
         args = parser.parse_args()
-        if hasattr(args, 'input_folder'):
-            self.datasetPath = args.input_folder
-        if hasattr(args, 'times_less'):
-            self.timesLess = int(args.times_less)
+        
+        # Check if args.input_folder and args.times_less are defined, if not, use defaults
+        self.datasetPath = args.input_folder if hasattr(args, 'input_folder') else DEFAULT_INPUT_PATH
+        self.timesLess = int(args.times_less) if hasattr(args, 'times_less') else DEFAULT_TIMES_LESS
 
     def get_file_list(self):
         self.file_list = glob.glob(os.path.join(self.datasetPath, "*"))
@@ -138,5 +138,4 @@ class selectDateset(object):
         print(f"tlsh elapsed time: {elapsed_time:.2f}")
 
 if __name__ == "__main__":
-    selectDateset().run()
-    
+    selectDataset().run()
