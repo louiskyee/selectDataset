@@ -14,13 +14,15 @@ The primary function is to allow users to select the most dispersed samples from
 
 ## Useage
 ```python=
-python3 selectDataset.py -i <datasetFolder> -t <timesLess>
+python3 selectDataset.py -i <datasetFolder> -t <timesLess> -p <pickle_file>
 ```
 ### parameter
-* -i: input_folder
-  * datasetFolder:  The folder path that stores binary ELF files.
-* -t: times_less
+* `-i`: (`--input-folder`)
+  * datasetFolder: The folder path that stores binary ELF files.
+* `-t`: (`--timesLess`)
   * timesLess: Specify the fraction of the dataset to obtain. If you input 5, it means to take one-fifth (1/5) of the dataset.
+* `-p`: (`--pickle-file`)
+  * pickle_file: Specify the full hash_dict.pickle file path to be read. The hach_dict.pickle file containing hash_dict data.
 
 ### Output
 * `choosed_files.txt`: This file contains a list of selected files.
@@ -29,5 +31,5 @@ python3 selectDataset.py -i <datasetFolder> -t <timesLess>
 
 ### Example
 ```python=
-python3 selectDataset.py -i ./dataset/ -t 5
+python3 selectDataset.py -i ./dataset/ -t 5 -p ./hash_dict.pickle
 ```
