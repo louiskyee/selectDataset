@@ -26,6 +26,7 @@ python3 selectDataset.py -i <datasetFolder> -t <timesLess> -p <pickle_file>
 
 ### Output
 * `choosed_files.txt`: This file contains a list of selected files.
+* `chosen_files_backup.txt`: Create a backup of the currently selected files. If `chosen_files_backup.txt` exists, but `choosed_files.txt` does not, it means that the file was not retrieved completely.
 * `hash_dict.pickle`: This file utilizes a dictionary structure to store the TLSh hash values of all files.
   * Format: `<fileName>: <tlshValue>`
 

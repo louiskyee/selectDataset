@@ -112,7 +112,11 @@ class selectDataset(object):
         self.available_files[curFileIdx] = 0
         # Initialize the minimum value for the selected file to -1
         self.min_values[curFileIdx] = -1
-    
+        # default number of saved files and can be adjusted as needed
+        standard_save_file_count = 100
+        # delete the backup file if it exists
+        if os.path.exists("./chosen_files_backup.txt"):
+            os.remove("./chosen_files_backup.txt")
         while len(self.chosen_files) < self.number_of_choose_files:
             # Calculate the hash value of the current file
             hashValue1 = self.hash_dict[curFile]
@@ -136,6 +140,11 @@ class selectDataset(object):
             curFile = self.fileNames[nextIdx]
             # Add the selected file to the list of chosen files
             self.chosen_files.append(curFile)
+            # Check if the length of self.chosen_files is a multiple of standard_save_file_count
+            if len(self.chosen_files) % standard_save_file_count == 0:
+                with open("./chosen_files_backup.txt", "a") as backup_f:
+                    for file in self.chosen_files:
+                        backup_f.write(f"{file}\n")
 
     def get_chosen_files(self):
         # Measure the start time
