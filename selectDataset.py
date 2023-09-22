@@ -75,6 +75,7 @@ class selectDataset(object):
         Get a list of files in the datasetPath directory
         '''
         self.file_list = glob.glob(os.path.join(self.datasetPath, "*"))
+        print(f"number of all files: {len(self.file_list)}")
 
     def write_hash_dict(self):
         '''
