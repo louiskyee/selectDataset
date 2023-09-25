@@ -24,8 +24,7 @@ class selectDataset(object):
         self.hash_dict = {}  # Dictionary to store hash values for files
         self.fileNames = []  # List to store file names
         self.chosen_files = []  # List to store selected files
-        self.available_files = np.full(0, 1)  # Array to track available files (initially all available)
-        self.min_values = np.full(0, np.inf)  # Array to store minimum values for file comparisons
+        self.min_values = np.full(0, np.inf)  # Array to store minimum values for file comparisons and track available files (initially all available), -1 means unavailable
         self.file_list = []  # List to store file paths
        
     def run(self):
@@ -104,26 +103,30 @@ class selectDataset(object):
         with open("./chosen_files.txt", "w") as f:
             for file in self.chosen_files:
                 f.write(f"{file}\n")
+        self.__delete_backup_file()
 
-    def __calculate_weight(self):
-        # Randomly select the first file
-        curFileIdx = random.randint(0, len(self.fileNames) - 1)
-        curFile = self.fileNames[curFileIdx]
-        self.chosen_files.append(curFile)
-        
-        # delete the backup file if it exists
+    def __delete_backup_file(self):
+        '''
+        Delete the backup file if it exists
+        '''
         if os.path.exists("./chosen_files_backup.txt"):
             os.remove("./chosen_files_backup.txt")
-        with open("./chosen_files_backup.txt", "a") as backup_f:
-            backup_f.write(f"{curFile}\n")
 
-        # Mark the selected file as unavailable
-        self.available_files[curFileIdx] = 0
-        # Initialize the minimum value for the selected file to -1
-        self.min_values[curFileIdx] = -1
+    def __calculate_weight(self):
+        self.__delete_backup_file()
 
         # Add the selected file to the list of chosen files
         with open("./chosen_files_backup.txt", "a") as backup_f:
+            # Randomly select the first file
+            curFileIdx = random.randint(0, len(self.fileNames) - 1)
+            curFile = self.fileNames[curFileIdx]
+            self.chosen_files.append(curFile)
+
+            # Initialize the minimum value for the selected file to -1
+            self.min_values[curFileIdx] = -1
+
+            backup_f.write(f"{curFile}\n")
+
             while len(self.chosen_files) < self.number_of_choose_files:
                 # Calculate the hash value of the current file
                 hashValue1 = self.hash_dict[curFile]
@@ -132,7 +135,7 @@ class selectDataset(object):
         
                 # Iterate through the file names and indices
                 for idx, fileName in enumerate(self.fileNames):
-                    if self.available_files[idx]:
+                    if self.min_values[idx] != -1:
                         # Calculate the hash value of the current comparison file
                         hashValue2 = self.hash_dict[fileName]
                         # Update the minimum value for the comparison file
@@ -143,7 +146,6 @@ class selectDataset(object):
         
                 # Mark the selected comparison file as unavailable
                 self.min_values[nextIdx] = -1
-                self.available_files[nextIdx] = 0
                 curFile = self.fileNames[nextIdx]
 
                 # Add the selected file to the list of chosen files
@@ -176,7 +178,6 @@ class selectDataset(object):
         self.fileNames: list = list(self.hash_dict.keys())
     
         # Initialize arrays to track available files and minimum values
-        self.available_files = np.full(n, 1)
         self.min_values = np.full(n, np.inf)
     
         # Calculate file weights for selection
