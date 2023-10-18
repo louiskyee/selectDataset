@@ -3,7 +3,6 @@ import numpy as np
 import argparse
 import random
 import pickle
-import glob
 import tlsh
 import time
 import os
@@ -61,8 +60,8 @@ class selectDataset(object):
         args = parser.parse_args()
     
         # Check if args.input_folder and args.times_less are defined, if not, use defaults
-        self.datasetPath = args.input_folder if hasattr(args, 'input_folder') else DEFAULT_INPUT_PATH
-        self.timesLess = int(args.times_less) if hasattr(args, 'times_less') else DEFAULT_TIMES_LESS
+        self.datasetPath = args.input_folder
+        self.timesLess = int(args.times_less)
         
         # Load hash_dict from pickle file if provided
         if args.pickle_file:
